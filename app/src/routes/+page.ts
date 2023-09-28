@@ -7,7 +7,7 @@ import groq from 'groq';
 import { PUBLIC_SANITY_DATASET, PUBLIC_SANITY_PROJECT_ID } from '$env/static/public';
 
 if (!PUBLIC_SANITY_PROJECT_ID || !PUBLIC_SANITY_DATASET) {
-  throw new Error('Did you forget to run sanity init --env?');
+  throw new Error('Did you forget to run sanity init --env?\n Did you add the .env file?\nDid you add http://localhost:5173/ to https://www.sanity.io/manage/personal/project/$projectId/api?\n');
 }
 
 const client = createClient({

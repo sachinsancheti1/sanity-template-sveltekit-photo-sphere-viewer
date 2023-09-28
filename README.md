@@ -1,6 +1,12 @@
 # A minimal SvelteKit Virtual Tour site with Sanity Studio
 
+![Photo](./intro.jpg)
+
 This starter uses [SvelteKit](https://kit.svelte.dev/) for the frontend and [Sanity](https://sanity.io/) to handle its content.
+
+## Demo Page
+
+- [Demo Page](https://enchanting-parfait-a5b9f6.netlify.app/)
 
 ## Featuring
 

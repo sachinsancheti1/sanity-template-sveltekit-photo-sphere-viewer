@@ -6,6 +6,7 @@ This starter uses [SvelteKit](https://kit.svelte.dev/) for the frontend and [San
 
 - How to fetch content as data from [the Sanity Content Lake](https://www.sanity.io/docs/datastore)
 - A [Sanity Studio](https://www.sanity.io/docs/sanity-studio) to create and edit content
+- A virtual tour using [Photo Sphere Viewer Virtual Tour](https://photo-sphere-viewer.js.org/plugins/virtual-tour.html) official Plugin
 
 > **Note**
 >

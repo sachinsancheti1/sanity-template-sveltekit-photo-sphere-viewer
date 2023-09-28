@@ -1,13 +1,11 @@
-# A minimal SvelteKit site with Sanity Studio
+# A minimal SvelteKit Virtual Tour site with Sanity Studio
 
 This starter uses [SvelteKit](https://kit.svelte.dev/) for the frontend and [Sanity](https://sanity.io/) to handle its content.
 
 ## Featuring
 
 - How to fetch content as data from [the Sanity Content Lake](https://www.sanity.io/docs/datastore)
-- How to render block content with [Portable Text](https://www.sanity.io/docs/presenting-block-text)
 - A [Sanity Studio](https://www.sanity.io/docs/sanity-studio) to create and edit content
-- How to crop and render images with [Sanity Image URLs](https://www.sanity.io/docs/image-url)
 
 > **Note**
 >
@@ -40,10 +38,10 @@ _Feel free to move each of the folders to their own location and check them into
 
 ### Add content
 
-1. Visit the Studio and create and publish a new `Post` document
+1. Visit the Studio and create and publish a new `VirtualTourPageBlocks` and `VirtualTourItem` document
 2. Visit the App and refresh the page to see your content rendered on the page
 
-The schema for the `Post` document is defined in the `/studio/schemas` folder. You can add more documents and schemas to the Studio to suit your needs.
+The schema for the `VirtualTourPageBlocks` and `VirtualTourItem` document are defined in the `/studio/schemas` folder. You can add more documents and schemas to the Studio to suit your needs.
 
 ## Removing TypeScript
 
@@ -60,6 +58,6 @@ If you intend to use TypeScript or have stripped TypeScript, you can safely dele
 
 The `/app` and `/studio` folders are meant to be deployed separately.
 
-Feel free to deploy the App to whichever hosting provider you prefer. We recommend [Vercel](https://vercel.com/).
+Feel free to deploy the App to whichever hosting provider you prefer.
 
 You can deploy the Sanity Studio by running `sanity deploy` in the `/studio` repository, provided you have the `@sanity/cli` installed globally.

@@ -37,7 +37,7 @@
 
     virtualTour.setNodes(
       virtualTourItem,
-      virtualTourPageBlocks.start._id
+      virtualTourPageBlocks.start.id
     )
   })
 </script>

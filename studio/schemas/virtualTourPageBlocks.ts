@@ -32,13 +32,13 @@ export default defineType({
       validation: (Rule) => Rule.required(),
       to: {
         type: 'virtualTourItem',
-      }
-    })
+      },
+    }),
   ],
   preview: {
     select: {
       title: 'title',
       subtitle: 'description',
-    }
+    },
   },
 })

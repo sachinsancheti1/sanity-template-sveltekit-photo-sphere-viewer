@@ -7,13 +7,13 @@
 
   export let virtualTourItem
   export let virtualTourPageBlocks
-    
+  
   onMount(() => {
     const viewer = new Viewer({
       container: wrapper,
       loadingImg: virtualTourPageBlocks.loader,
       defaultYaw: '0deg',
-      
+      defaultZoomLvl: 0,
       navbar: 'zoom move gallery caption fullscreen',
 
       plugins: [
@@ -27,7 +27,11 @@
           VirtualTourPlugin,
           {
             renderMode: '3d',
-            positionMode: 'manual'
+            positionMode: 'manual',
+            arrowPosition: 'bottom',
+            dataMode: 'client',
+            preload: true,
+            startNodeId: virtualTourPageBlocks.startID
           }
         ]
       ]

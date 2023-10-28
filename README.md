@@ -2,7 +2,7 @@
 
 ![Photo](./intro.jpg)
 
-This starter uses [SvelteKit](https://kit.svelte.dev/) for the frontend and [Sanity](https://sanity.io/) to handle its content.
+This starter uses [SvelteKit 4](https://kit.svelte.dev/) for the frontend and [Sanity](https://sanity.io/) to handle its content.
 
 ## Demo Page
 
@@ -49,6 +49,12 @@ _Feel free to move each of the folders to their own location and check them into
 2. Visit the App and refresh the page to see your content rendered on the page
 
 The schema for the `VirtualTourPageBlocks` and `VirtualTourItem` document are defined in the `/studio/schemas` folder. You can add more documents and schemas to the Studio to suit your needs.
+
+## Additional Configurations to the Virtual Tour
+
+The Virtual Tour is controlled by the file `app/src/lib/Virtual.svelte` which uses the `Manual` mode using `textureX/textureY` coordinate system. This can be changed to `yaw/pitch` or GPS mode using the guide on the [Official Plugin Website](https://photo-sphere-viewer.js.org/plugins/virtual-tour.html#usage)
+
+The nodes are configured in `Client Mode`. The Virtual Tour by itself in the `new Viewer({ ... })` can be configured with more options using [Standard Configurations](https://photo-sphere-viewer.js.org/guide/config.html#standard-options) and [Advanced Configuration](https://photo-sphere-viewer.js.org/guide/config.html#advanced-options) Options. This will be helpful in customizing the viewer's page.
 
 ## Removing TypeScript
 

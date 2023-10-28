@@ -36,13 +36,13 @@ export default defineType({
       type: 'number',
       title: 'posePitch',
       initialValue: 0,
-    })
+    }),
   ],
   preview: {
     select: {
       title: 'title',
       media: 'image',
       subtitle: 'caption',
-    }
+    },
   },
 })

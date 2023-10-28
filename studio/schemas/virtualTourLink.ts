@@ -49,5 +49,5 @@ export default defineType({
         media,
       }
     },
-  }
+  },
 })

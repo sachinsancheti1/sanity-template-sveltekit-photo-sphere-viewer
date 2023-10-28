@@ -1,7 +1,7 @@
 {
-  "name": "app",
+  "name": "virtual-tour-studio",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "package.json",
   "license": "UNLICENSED",
   "scripts": {
@@ -9,7 +9,8 @@
     "start": "sanity start",
     "build": "sanity build",
     "deploy": "sanity deploy",
-    "deploy-graphql": "sanity graphql deploy"
+    "deploy-graphql": "sanity graphql deploy",
+    "format": "pnpx prettier --write \"**/*.{md,css,js,ts,json}\" \"!node_modules/**\""
   },
   "keywords": [
     "sanity"
@@ -23,12 +24,12 @@
     "styled-components": "^5.2.0"
   },
   "devDependencies": {
-    "@sanity/eslint-config-studio": "^2.0.1",
+    "@sanity/eslint-config-studio": "^3.0.1",
     "@types/node": "^18.15.11",
     "@types/react": "^18.0.25",
     "@types/styled-components": "^5.1.26",
     "eslint": "^8.6.0",
-    "prettier": "^2.8.4",
+    "prettier": "^3.0.3",
     "typescript": "^5.0.2"
   },
   "prettier": {

@@ -1,5 +1,5 @@
 export function virtualTourPageBlocks() {
-  return `*[_type == "virtualTourPageBlocks"]{
+	return `*[_type == "virtualTourPageBlocks"]{
     title,
     description,
     "loader":loader.asset->url,
@@ -7,10 +7,10 @@ export function virtualTourPageBlocks() {
     "name": title,
     "id":_id
     }
-  }`
+  }`;
 }
 
-export function virtualTourItem(){
+export function virtualTourItem() {
 	return `*[_type == "virtualTourItem"]{
 		    "id":_id,
 		    "name": title,
@@ -25,5 +25,5 @@ export function virtualTourItem(){
 		      "nodeId":nodeID->_id
 		    },
 		    "panoData": {poseHeading}
-		  }`
-		}
+		  }`;
+}

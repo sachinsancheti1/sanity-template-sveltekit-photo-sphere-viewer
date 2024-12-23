@@ -9,12 +9,12 @@ export const load: PageServerLoad = async () => {
         "virtualTourPageBlocks": ${virtualTourPageBlocks()}[0],
         "virtualTourItem": ${virtualTourItem()}
       }`);
-        console.log(e);
+        // console.log(e);
         return {
             e,
         };
     } catch (e) {
         console.log(e);
-        throw error(404, "Not found");
+        error(404, "Not found");
     }
 };

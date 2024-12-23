@@ -23,8 +23,8 @@
 <style>
   .app {
     margin: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 80vw;
+    height: 80vh;
     font-family: sans-serif;
   }
 </style>

@@ -2,7 +2,7 @@
 
 ![Photo](./intro.jpg)
 
-This starter uses [SvelteKit 4](https://kit.svelte.dev/) for the frontend and [Sanity](https://sanity.io/) to handle its content.
+This starter uses [SvelteKit 2](https://kit.svelte.dev/) for the frontend and [Sanity](https://sanity.io/) to handle its content.
 
 ## Demo Page
 

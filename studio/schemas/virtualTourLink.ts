@@ -1,4 +1,4 @@
-import {defineType, defineField, defineArrayMember} from 'sanity'
+import {defineType, defineField} from 'sanity'
 
 /**
  * This is the schema definition for the rich text fields used for
@@ -33,6 +33,7 @@ export default defineType({
       name: 'textureY',
       type: 'number',
       title: 'Texture Y',
+      description: 'Typically half of the height of the image',
     }),
   ],
   preview: {

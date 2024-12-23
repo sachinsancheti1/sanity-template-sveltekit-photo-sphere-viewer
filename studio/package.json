@@ -10,7 +10,8 @@
     "build": "sanity build",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
-    "format": "pnpx prettier --write \"**/*.{md,css,js,ts,json}\" \"!node_modules/**\""
+    "format": "pnpx prettier --write \"**/*.{md,css,js,ts,json}\" \"!node_modules/**\"",
+    "lint": "eslint ."
   },
   "keywords": [
     "sanity"
@@ -23,7 +24,7 @@
     "styled-components": "^6.1.13"
   },
   "devDependencies": {
-    "@sanity/eslint-config-studio": "^4.0.0",
+    "@sanity/eslint-config-studio": "^5.0.1",
     "@types/node": "^18.15.11",
     "@types/react": "^18.0.25",
     "eslint": "^9.14.0",

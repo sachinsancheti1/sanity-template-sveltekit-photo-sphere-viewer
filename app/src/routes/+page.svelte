@@ -8,7 +8,8 @@
 </script>
 
 <svelte:head>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>{e.virtualTourPageBlocks.title}</title>
+	<meta name="description" content={e.virtualTourPageBlocks.description} />
 	<meta property="og:title" content={e.virtualTourPageBlocks.title} />
 	<meta property="og:description" content={e.virtualTourPageBlocks.description} />
 	<meta property="og:type" content="website" />
@@ -21,10 +22,10 @@
 </div>
 
 <style>
-  .app {
-    margin: 0;
-    width: 80vw;
-    height: 80vh;
-    font-family: sans-serif;
-  }
+	.app {
+		margin: 0;
+		width: 80vw;
+		height: 80vh;
+		font-family: sans-serif;
+	}
 </style>

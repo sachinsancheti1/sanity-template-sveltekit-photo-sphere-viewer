@@ -49,26 +49,3 @@ button {
 button:hover {
 	background-color: var(--primary-color);
 }
-
-.features {
-	margin-top: 3rem;
-	text-align: center;
-}
-
-.feature-list {
-	display: flex;
-	justify-content: space-around;
-	margin-top: 2rem;
-}
-
-.feature {
-	text-align: center;
-}
-
-.feature img {
-	width: 50px;
-}
-
-.feature p {
-	margin-top: 1rem;
-}

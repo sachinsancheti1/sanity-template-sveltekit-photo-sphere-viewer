@@ -34,8 +34,22 @@ export default defineType({
     defineField({
       name: 'posePitch',
       type: 'number',
-      title: 'posePitch',
+      title: 'Pose Pitch',
       initialValue: 0,
+    }),
+    defineField({
+      name: 'description',
+      type: 'text',
+      title: 'Description',
+      description: 'Longer description shown in the viewer tooltip and info panel.',
+      rows: 3,
+    }),
+    defineField({
+      name: 'showInGallery',
+      type: 'boolean',
+      title: 'Show in Gallery',
+      description: 'Uncheck to hide this node from the gallery thumbnail strip.',
+      initialValue: true,
     }),
   ],
   preview: {

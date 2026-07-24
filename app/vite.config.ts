@@ -5,6 +5,12 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
 	plugins: [sveltekit(), tailwindcss()],
 	ssr: {
-		noExternal: ['@photo-sphere-viewer/core', '@photo-sphere-viewer/gallery-plugin', '@photo-sphere-viewer/virtual-tour-plugin']
+		noExternal: [
+			'@photo-sphere-viewer/core',
+			'@photo-sphere-viewer/autorotate-plugin',
+			'@photo-sphere-viewer/compass-plugin',
+			'@photo-sphere-viewer/gallery-plugin',
+			'@photo-sphere-viewer/virtual-tour-plugin'
+		]
 	}
 });

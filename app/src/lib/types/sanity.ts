@@ -13,6 +13,14 @@ export type VirtualTourPageBlocks = {
 	description: string | null
 	loader: string | null
 	start: VirtualTourStart | null
+	defaultZoomLvl: number
+	minFov: number
+	maxFov: number
+	showGalleryOnLoad: boolean
+	transitionSpeed: string
+	autorotateEnabled: boolean
+	autorotateDelay: number
+	autorotateSpeed: string
 }
 
 export type VirtualTourLinkPosition = {
@@ -23,6 +31,11 @@ export type VirtualTourLinkPosition = {
 export type VirtualTourLink = {
 	position: VirtualTourLinkPosition
 	nodeId: string | null
+	name: string | null
+	data: {
+		arrivalPitch: number | null
+		arrivalZoom: number | null
+	} | null
 }
 
 export type VirtualTourPanoData = {
@@ -34,8 +47,10 @@ export type VirtualTourItem = {
 	id: string
 	name: string | null
 	caption: string | null
+	description: string | null
 	panorama: string | null
 	thumbnail: string | null
+	showInGallery: boolean
 	links: VirtualTourLink[] | null
 	panoData: VirtualTourPanoData | null
 }

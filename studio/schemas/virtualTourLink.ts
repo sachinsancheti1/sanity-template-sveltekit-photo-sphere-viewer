@@ -35,6 +35,25 @@ export default defineType({
       title: 'Texture Y',
       description: 'Typically half of the height of the image',
     }),
+    defineField({
+      name: 'linkName',
+      type: 'string',
+      title: 'Arrow Label',
+      description: 'Optional label shown on the navigation arrow. Defaults to the target node title.',
+    }),
+    defineField({
+      name: 'arrivalPitch',
+      type: 'number',
+      title: 'Arrival Pitch (degrees)',
+      description: 'Vertical viewing angle when arriving at the linked node. Leave blank to use the node default.',
+    }),
+    defineField({
+      name: 'arrivalZoom',
+      type: 'number',
+      title: 'Arrival Zoom Level',
+      description: 'Zoom level (0–100) when arriving at the linked node. Leave blank to use the viewer default.',
+      validation: (Rule) => Rule.min(0).max(100),
+    }),
   ],
   preview: {
     select: {

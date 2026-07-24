@@ -62,11 +62,16 @@ export function virtualTourPageBlocks() {
 	return `*[_type == "virtualTourPageBlocks"]{
     title,
     description,
-    "loader":loader.asset->url,
-    start->{
-    "name": title,
-    "id":_id
-    }
+    "loader": loader.asset->url,
+    start->{ "name": title, "id": _id },
+    "defaultZoomLvl": coalesce(defaultZoomLvl, 50),
+    "minFov": coalesce(minFov, 30),
+    "maxFov": coalesce(maxFov, 90),
+    "showGalleryOnLoad": coalesce(showGalleryOnLoad, false),
+    "transitionSpeed": coalesce(transitionSpeed, "20rpm"),
+    "autorotateEnabled": coalesce(autorotateEnabled, true),
+    "autorotateDelay": coalesce(autorotateDelay, 3000),
+    "autorotateSpeed": coalesce(autorotateSpeed, "2rpm")
   }`;
 }
 
@@ -77,12 +82,19 @@ export function virtualTourItem() {
 		    caption,
 		    "panorama":image.asset->url,
 		    "thumbnail":image.asset->url + "?w=200",
+		    description,
+		    "showInGallery": coalesce(showInGallery, true),
 		    "links": links[]{
 		      "position":{
 		        textureX,
 		        textureY
 		      },
-		      "nodeId":nodeID->_id
+		      "nodeId":nodeID->_id,
+		      "name": linkName,
+		      "data": {
+		        "arrivalPitch": arrivalPitch,
+		        "arrivalZoom": arrivalZoom
+		      }
 		    },
 		    "panoData": {poseHeading, posePitch}
 		  }`;

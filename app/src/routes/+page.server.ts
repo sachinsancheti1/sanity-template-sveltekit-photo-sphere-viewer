@@ -10,9 +10,9 @@ export const load: PageServerLoad = async () => {
         "virtualTourPageBlocks": ${virtualTourPageBlocks()}[0],
         "virtualTourItem": ${virtualTourItem()}
       }`);
-		return { e: data };
+		return { tour: data };
 	} catch (err) {
-		console.log(err);
-		error(404, 'Not found');
+		console.error(err);
+		error(500, 'Failed to load tour data');
 	}
 };

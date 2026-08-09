@@ -1,5 +1,22 @@
 # Changelog
 
+## v2.0.1 — 2026-08-09
+
+Security and dependency maintenance. No feature or schema changes.
+
+### Security
+
+- **App: 6 vulnerabilities → 0.** Fixed via `npm audit fix` (SvelteKit ReDoS in content negotiation, plus vite, postcss, nanoid, and brace-expansion advisories) and a `cookie: ^0.7.2` override (SvelteKit still pins the vulnerable 0.6 range upstream).
+- **Studio: 19 vulnerabilities → 1 remaining advisory.** Fixed via the Sanity 6.9.1 upgrade, `npm audit fix`, and scoped overrides (`smol-toml`, `undici`, `uuid`). The remainder is `js-yaml` 3.x inside `@sanity/cli` → `@vercel/frameworks` — dev-CLI-only code, and no safe override exists because it uses the `safeLoad` API that js-yaml 4.x removed; waiting on an upstream bump. Note: `npm audit fix --force` suggests "fixing" this by downgrading to sanity 5.14.1 — don't.
+
+### Upgraded
+
+- Sanity Studio 6.0 → **6.9.1** (with matching `@sanity/vision`; `@sanity/dashboard` 6.0.14)
+- `sanity-plugin-media` 4.x → **6.1.1**
+- Photo Sphere Viewer plugins aligned at **5.15.1** (previously a mix of 5.4.2 and 5.14.1)
+- `@tailwindcss/vite` 4.0.0-beta.6 → **4.3.3 stable**; `tailwindcss` 4.3.3
+- Studio `pnpm-lock.yaml` regenerated to match
+
 ## v2.0.0 — 2026-08-09
 
 A major overhaul of the template. Existing Sanity datasets are fully compatible — every new schema field is optional with a sensible default.

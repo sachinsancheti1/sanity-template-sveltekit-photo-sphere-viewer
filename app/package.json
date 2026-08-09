@@ -1,6 +1,6 @@
 {
 	"name": "virtual-tour-svelte-app",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
@@ -13,13 +13,13 @@
 		"format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
 	},
 	"dependencies": {
-		"@photo-sphere-viewer/autorotate-plugin": "^5.14.1",
-		"@photo-sphere-viewer/compass-plugin": "^5.14.1",
-		"@photo-sphere-viewer/core": "^5.4.2",
-		"@photo-sphere-viewer/gallery-plugin": "^5.4.2",
-		"@photo-sphere-viewer/virtual-tour-plugin": "^5.4.2",
+		"@photo-sphere-viewer/autorotate-plugin": "^5.15.1",
+		"@photo-sphere-viewer/compass-plugin": "^5.15.1",
+		"@photo-sphere-viewer/core": "^5.15.1",
+		"@photo-sphere-viewer/gallery-plugin": "^5.15.1",
+		"@photo-sphere-viewer/virtual-tour-plugin": "^5.15.1",
 		"@sanity/client": "^7.22.0",
-		"@tailwindcss/vite": "^4.0.0-beta.6"
+		"@tailwindcss/vite": "^4.3.3"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.1.0",
@@ -38,7 +38,7 @@
 		"prettier-plugin-svelte": "^4.0.0",
 		"svelte": "^5.15.0",
 		"svelte-check": "^4.4.8",
-		"tailwindcss": "^4.3.0",
+		"tailwindcss": "^4.3.3",
 		"tslib": "^2.4.1",
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.59.4",
@@ -46,6 +46,9 @@
 		"vitest": "^4.1.7"
 	},
 	"type": "module",
+	"overrides": {
+		"cookie": "^0.7.2"
+	},
 	"engines": {
 		"node": ">=22.0.0"
 	}

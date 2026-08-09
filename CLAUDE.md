@@ -63,6 +63,7 @@ SANITY_STUDIO_DATASET=...
 | `app/src/routes/+page.svelte` | Home page — renders title, meta tags, viewer |
 | `app/src/routes/health/` | Content-health dashboard listing broken/incomplete tour nodes |
 | `app/src/lib/components/Virtual.svelte` | Photo Sphere Viewer init with all plugins |
+| `app/src/lib/utils/psv.ts` | Pure Sanity→PSV node mapping (unit-tested in `psv.test.ts`; `npm test` in app/) |
 | `app/src/lib/utils/sanity.ts` | GROQ query functions (`virtualTourPageBlocks`, `virtualTourItem`, `healthQuery`) |
 | `app/src/lib/server/sanityClient.ts` | Sanity client singleton |
 | `app/src/lib/styles/style.css` | Global styles + Tailwind base |

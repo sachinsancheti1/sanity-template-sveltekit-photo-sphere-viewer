@@ -8,6 +8,36 @@ This starter uses [SvelteKit 2](https://kit.svelte.dev/) for the frontend and [S
 
 - [Demo Page](https://enchanting-parfait-a5b9f6.netlify.app/)
 
+## What's New in v2 (August 2026)
+
+The template received a major overhaul. If you generated a project from this template before v2, see [Upgrading from v1](#upgrading-from-v1) below.
+
+### New viewer features
+
+- **Autorotate** — idle auto-rotation, fully configurable from the Studio (enable/disable, delay, speed)
+- **Compass** — on-screen compass showing the current heading, with navigation hotspots plotted on it
+- **CMS-driven viewer settings** — default zoom, min/max FOV, transition speed, and gallery visibility are now editable in the Studio instead of hard-coded
+- **Per-link arrival control** — each hotspot can set `arrivalPitch` / `arrivalZoom` for the destination camera, plus a `linkName` tooltip
+- **Gallery control** — hide individual nodes from the gallery strip with `showInGallery`
+
+### New tooling
+
+- **Content health dashboard** at `/health` in the app — lists nodes with missing images, broken references, missing texture coordinates, self-links, and missing metadata, so you can fix your tour data before visitors find the gaps
+- **Sanity Studio v6** with the structure tool, a dashboard, and [sanity-plugin-media](https://github.com/sanity-io/sanity-plugin-media) for asset management
+
+### Fixes and upgrades
+
+- Fixed the tour starting at the wrong node, and `posePitch` being ignored
+- Svelte 5 (runes), Tailwind CSS v4, Vite 8, TypeScript 6
+
+### Upgrading from v1
+
+Projects generated from a template do not receive updates automatically. To upgrade an existing project:
+
+- **Content is safe** — all new schema fields are optional with sensible defaults, so your existing Sanity dataset keeps working unchanged.
+- **Code** — the cleanest path is to generate a fresh project from this template and point it at your existing Sanity project/dataset, then re-apply any customizations. Alternatively, diff your project against the [v2.0.0 release](../../releases) and port the changes.
+- **Node.js 22+** is now required.
+
 ## Featuring
 
 - How to fetch content as data from [the Sanity Content Lake](https://www.sanity.io/docs/datastore)
@@ -22,7 +52,7 @@ This starter uses [SvelteKit 2](https://kit.svelte.dev/) for the frontend and [S
 
 ## Prerequisities
 
-- [Node.js](https://nodejs.org/en/) (v14.18 or later)
+- [Node.js](https://nodejs.org/en/) (v22 or later)
 - [Sanity CLI](https://www.sanity.io/docs/getting-started-with-sanity-cli) (optional)
 
 ## Getting started

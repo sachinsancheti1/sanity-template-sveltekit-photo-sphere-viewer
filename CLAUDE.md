@@ -102,6 +102,6 @@ SANITY_STUDIO_DATASET=...
 ## CI & Maintenance
 
 - `.github/workflows/ci.yml` runs on every PR and push to main: app `npm test` + `check` + `build`, studio `build` (placeholder Sanity env vars — builds don't fetch data)
-- `.github/dependabot.yml` opens grouped monthly update PRs for app, studio, and GitHub Actions; let CI go green before merging
+- `.github/dependabot.yml` opens at most one monthly update PR each for app, studio, and GitHub Actions (every package, majors included, grouped per folder); let CI go green before merging. TypeScript major bumps are ignored in app/ until SvelteKit's peer range allows TypeScript 7 — remove that `ignore` entry once it does
 - Studio `package.json` has scoped npm `overrides` for transitive advisories. When changing a *nested* override, delete that package's entries from `package-lock.json` first — npm won't re-resolve an existing lockfile entry. Keep `studio/pnpm-lock.yaml` in sync with `pnpm install --lockfile-only`
 - `react` and `react-dom` must be the exact same version or the studio build and CLI fail

@@ -5,24 +5,25 @@ updates:
     schedule:
       interval: monthly
     groups:
-      photo-sphere-viewer:
-        patterns: ["@photo-sphere-viewer/*"]
-      minor-and-patch:
-        update-types: [minor, patch]
+      app-dependencies:
+        patterns: ["*"]
+    ignore:
+      # SvelteKit 2.x declares no TypeScript 7 support yet (npm ci fails on the peer range)
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: npm
     directory: /studio
     schedule:
       interval: monthly
     groups:
-      sanity:
-        patterns: ["sanity", "@sanity/*", "sanity-plugin-*"]
-      react:
-        patterns: ["react", "react-dom", "@types/react"]
-      minor-and-patch:
-        update-types: [minor, patch]
+      studio-dependencies:
+        patterns: ["*"]
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: monthly
+    groups:
+      github-actions:
+        patterns: ["*"]

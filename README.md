@@ -8,6 +8,14 @@ This starter uses [SvelteKit 2](https://kit.svelte.dev/) for the frontend and [S
 
 - [Demo Page](https://enchanting-parfait-a5b9f6.netlify.app/)
 
+## What's New in v2.2 (September 2026)
+
+- **Shareable scene links** — the address bar tracks the current scene (`?node=…`), so any view can be shared and opens right there. The browser's Back button steps through visited scenes. Links to scenes that no longer exist fall back to the start scene.
+- **Rich link previews** — shared links show a preview image of the scene they open on, titled with the scene name.
+- **Lighter panoramas** — served as WebP and capped at 8192px wide; hotspots on larger uploads are rescaled automatically so they stay in place.
+- **Faster repeat visits** — the tour page is edge-cached for 60 seconds (published edits appear within a minute).
+- **Full-window layout** on every screen size, including phones.
+
 ## What's New in v2 (August 2026)
 
 The template received a major overhaul. If you generated a project from this template before v2, see [Upgrading from v1](#upgrading-from-v1) below.

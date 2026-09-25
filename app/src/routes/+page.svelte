@@ -57,6 +57,7 @@
 		display: flex;
 		flex-direction: column;
 		height: 100vh;
+		height: 100dvh;
 		overflow: hidden;
 	}
 
@@ -83,6 +84,9 @@
 		font-size: 1rem;
 		font-weight: 600;
 		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		min-width: 0;
 	}
 
 	.tour-description {
@@ -92,6 +96,14 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+		min-width: 0;
+		flex-shrink: 100;
+	}
+
+	@media (max-width: 640px) {
+		.tour-description {
+			display: none;
+		}
 	}
 
 	.health-link {

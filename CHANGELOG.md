@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.3.0 — 2026-09-26
+
+### Added
+
+- **Share this view.** A Share button in the viewer toolbar creates a link to exactly what the visitor is looking at: scene, direction, and zoom (`?node=…&yaw=…&pitch=…&zoom=…`, degrees). Phones and tablets open the system share sheet; desktops copy the link and confirm in the viewer.
+- **Shared views open where they were shared.** The viewer turns to the linked direction and zoom, and idle autorotate doesn't start on its own for these links (the autorotate button still works). Hand-edited values are normalized; the view params drop out of the URL once the visitor moves to another scene.
+- **Tab title follows the scene** (`<scene> · <tour>`), and is restored on Back.
+- **Setup guidance** instead of a blank page when the tour has no Virtual Tour Section document or no Starting Node, pointing editors to the exact Studio location. A missing document previously caused a server error.
+- **Error pages** for "page not found" and "tour couldn't load" (e.g. Sanity unreachable), with a Try again button.
+
 ## v2.2.0 — 2026-09-26
 
 ### Added

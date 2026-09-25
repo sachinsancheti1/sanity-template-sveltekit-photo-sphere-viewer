@@ -21,7 +21,7 @@ jobs:
       PUBLIC_SANITY_PROJECT_ID: ci-placeholder
       PUBLIC_SANITY_DATASET: production
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v5
         with:
           node-version: 22
@@ -42,7 +42,7 @@ jobs:
       SANITY_STUDIO_PROJECT_ID: ci-placeholder
       SANITY_STUDIO_DATASET: production
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v5
         with:
           node-version: 22

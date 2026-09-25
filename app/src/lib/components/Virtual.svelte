@@ -9,21 +9,33 @@
 
 	import type { VirtualTourItem, VirtualTourPageBlocks } from '$lib/types/sanity';
 	import { toPsvNodes } from '$lib/utils/psv';
+	import type { TourView } from '$lib/utils/view';
+
+	type ShareRequest = { nodeId: string; position: { yaw: number; pitch: number }; zoom: number };
+
+	const SHARE_ICON =
+		'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>';
 
 	let {
 		virtualTourItem,
 		virtualTourPageBlocks,
 		initialNodeId,
+		initialView = null,
 		nodeId,
-		onnodechange
+		onnodechange,
+		onshare
 	}: {
 		virtualTourItem: VirtualTourItem[];
 		virtualTourPageBlocks: VirtualTourPageBlocks;
 		/** Node the viewer opens on (already validated by the page load). */
 		initialNodeId: string;
+		/** Camera view from a share link, applied once to the initial node. */
+		initialView?: TourView | null;
 		/** Node requested by the page after load, e.g. on browser back/forward. */
 		nodeId?: string;
 		onnodechange?: (nodeId: string) => void;
+		/** Adds a Share button; resolves to a confirmation message to show, if any. */
+		onshare?: (view: ShareRequest) => Promise<string | undefined>;
 	} = $props();
 
 	let wrapper = $state<HTMLDivElement | null>(null);
@@ -35,6 +47,8 @@
 		// Read reactive values synchronously so the effect tracks them before the async gap
 		const container = wrapper;
 		const startId = initialNodeId;
+		const sharedView = initialView;
+		const shareEnabled = !!onshare;
 		const loadingImg = virtualTourPageBlocks.loader ?? undefined;
 		const nodes = toPsvNodes(virtualTourItem);
 		const {
@@ -73,7 +87,35 @@
 					loadingImg,
 					defaultYaw: '0deg',
 					defaultZoomLvl,
-					navbar: 'autorotate zoom move gallery caption fullscreen',
+					navbar: [
+						'autorotate',
+						'zoom',
+						'move',
+						'gallery',
+						...(shareEnabled
+							? [
+									{
+										id: 'share',
+										title: 'Share this view',
+										content: SHARE_ICON,
+										onClick: (v: Viewer) => {
+											const current = v.getPlugin(VirtualTourPlugin) as VirtualTourPluginType;
+											const node = current.getCurrentNode();
+											if (!node || !onshare) return;
+											onshare({
+												nodeId: node.id,
+												position: v.getPosition(),
+												zoom: v.getZoomLevel()
+											}).then((message) => {
+												if (message) v.notification.show({ content: message, timeout: 2500 });
+											});
+										}
+									}
+								]
+							: []),
+						'caption',
+						'fullscreen'
+					],
 					touchmoveTwoFingers: true,
 					moveInertia: true,
 					minFov,
@@ -83,9 +125,10 @@
 						[
 							AutorotatePlugin,
 							{
-								// null autostartDelay disables auto-start when autorotateEnabled is false
-								autostartDelay: autorotateEnabled ? autorotateDelay : null,
-								autostartOnIdle: autorotateEnabled,
+								// null autostartDelay disables auto-start: when autorotateEnabled is false, and on
+								// shared-view links so the tour doesn't spin away from the spot someone shared
+								autostartDelay: autorotateEnabled && !sharedView ? autorotateDelay : null,
+								autostartOnIdle: autorotateEnabled && !sharedView,
 								autorotateSpeed
 							}
 						],
@@ -134,7 +177,15 @@
 				});
 
 				const plugin = viewer.getPlugin(VirtualTourPlugin) as VirtualTourPluginType;
-				plugin.addEventListener('node-changed', ({ node }) => onnodechange?.(node.id));
+				let pendingView = sharedView;
+				plugin.addEventListener('node-changed', ({ node }) => {
+					if (pendingView && node.id === startId) {
+						viewer?.rotate({ yaw: `${pendingView.yaw}deg`, pitch: `${pendingView.pitch}deg` });
+						if (pendingView.zoom !== undefined) viewer?.zoom(pendingView.zoom);
+					}
+					pendingView = null;
+					onnodechange?.(node.id);
+				});
 				plugin.setNodes(nodes, startId);
 				virtualTour = plugin;
 			}

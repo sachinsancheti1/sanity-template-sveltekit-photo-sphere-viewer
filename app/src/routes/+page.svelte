@@ -1,10 +1,24 @@
 <script lang="ts">
 	import Virtual from '$lib/components/Virtual.svelte';
+	import { page } from '$app/state';
+	import { pushState, replaceState } from '$app/navigation';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	const tour = $derived(data.tour);
+
+	// Keep ?node= in sync with the viewer so every scene has a shareable link. The first scene
+	// replaces the history entry; later moves push one, so Back steps through visited scenes.
+	// Shallow routing leaves page.url at the originally loaded URL, so the scene shown for each
+	// history entry lives in page.state (restored by SvelteKit on Back/Forward).
+	function handleNodeChange(nodeId: string) {
+		if (nodeId === page.state.nodeId) return;
+		const url = new URL(page.url);
+		url.searchParams.set('node', nodeId);
+		if (page.state.nodeId) pushState(url, { nodeId });
+		else replaceState(url, { nodeId });
+	}
 </script>
 
 <svelte:head>
@@ -26,10 +40,15 @@
 		<a href="/health" class="health-link">Health Check</a>
 	</header>
 	<div class="viewer-container">
-		<Virtual
-			virtualTourPageBlocks={tour.virtualTourPageBlocks}
-			virtualTourItem={tour.virtualTourItem}
-		/>
+		{#if data.initialNodeId}
+			<Virtual
+				virtualTourPageBlocks={tour.virtualTourPageBlocks}
+				virtualTourItem={tour.virtualTourItem}
+				initialNodeId={data.initialNodeId}
+				nodeId={page.state.nodeId}
+				onnodechange={handleNodeChange}
+			/>
+		{/if}
 	</div>
 </div>
 

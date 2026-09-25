@@ -12,20 +12,29 @@
 
 	let {
 		virtualTourItem,
-		virtualTourPageBlocks
+		virtualTourPageBlocks,
+		initialNodeId,
+		nodeId,
+		onnodechange
 	}: {
 		virtualTourItem: VirtualTourItem[];
 		virtualTourPageBlocks: VirtualTourPageBlocks;
+		/** Node the viewer opens on (already validated by the page load). */
+		initialNodeId: string;
+		/** Node requested by the page after load, e.g. on browser back/forward. */
+		nodeId?: string;
+		onnodechange?: (nodeId: string) => void;
 	} = $props();
 
 	let wrapper = $state<HTMLDivElement | null>(null);
+	let virtualTour = $state.raw<VirtualTourPluginType | null>(null);
 
 	$effect(() => {
 		if (!wrapper || !virtualTourPageBlocks.start) return;
 
 		// Read reactive values synchronously so the effect tracks them before the async gap
 		const container = wrapper;
-		const startId = virtualTourPageBlocks.start.id;
+		const startId = initialNodeId;
 		const loadingImg = virtualTourPageBlocks.loader ?? undefined;
 		const nodes = toPsvNodes(virtualTourItem);
 		const {
@@ -124,16 +133,24 @@
 					]
 				});
 
-				const virtualTour = viewer.getPlugin(VirtualTourPlugin) as VirtualTourPluginType;
-
-				virtualTour.setNodes(nodes, startId);
+				const plugin = viewer.getPlugin(VirtualTourPlugin) as VirtualTourPluginType;
+				plugin.addEventListener('node-changed', ({ node }) => onnodechange?.(node.id));
+				plugin.setNodes(nodes, startId);
+				virtualTour = plugin;
 			}
 		);
 
 		return () => {
 			cancelled = true;
+			virtualTour = null;
 			viewer?.destroy();
 		};
+	});
+
+	$effect(() => {
+		if (virtualTour && nodeId && virtualTour.getCurrentNode()?.id !== nodeId) {
+			virtualTour.setCurrentNode(nodeId);
+		}
 	});
 </script>
 

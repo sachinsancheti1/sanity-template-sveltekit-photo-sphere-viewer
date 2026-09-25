@@ -2,6 +2,18 @@ import type { PanoData } from '@photo-sphere-viewer/core';
 import type { VirtualTourItem } from '../types/sanity';
 
 /**
+ * Pick the node a visitor lands on: the requested one (e.g. from `?node=`) when it
+ * exists in the tour, otherwise the configured start node.
+ */
+export function resolveInitialNodeId(
+	requested: string | null | undefined,
+	items: Pick<VirtualTourItem, 'id'>[],
+	startId: string
+): string {
+	return requested && items.some((item) => item.id === requested) ? requested : startId;
+}
+
+/**
  * Map Sanity query results to Photo Sphere Viewer VirtualTourPlugin nodes:
  * convert null → undefined and drop links that PSV cannot render.
  */

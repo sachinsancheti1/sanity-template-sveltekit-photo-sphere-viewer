@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { toPsvNodes } from './psv';
+import { resolveInitialNodeId, toPsvNodes } from './psv';
 import type { VirtualTourItem, VirtualTourLink } from '../types/sanity';
 
 function makeItem(overrides: Partial<VirtualTourItem> = {}): VirtualTourItem {
@@ -107,5 +107,20 @@ describe('toPsvNodes', () => {
 	it('preserves showInGallery: false', () => {
 		const [node] = toPsvNodes([makeItem({ showInGallery: false })]);
 		expect(node.showInGallery).toBe(false);
+	});
+});
+
+describe('resolveInitialNodeId', () => {
+	const items = [{ id: 'start' }, { id: 'lobby' }];
+
+	it('uses the requested node when it exists', () => {
+		expect(resolveInitialNodeId('lobby', items, 'start')).toBe('lobby');
+	});
+
+	it('falls back to the start node for unknown, empty, or missing requests', () => {
+		expect(resolveInitialNodeId('deleted-node', items, 'start')).toBe('start');
+		expect(resolveInitialNodeId('', items, 'start')).toBe('start');
+		expect(resolveInitialNodeId(null, items, 'start')).toBe('start');
+		expect(resolveInitialNodeId(undefined, items, 'start')).toBe('start');
 	});
 });

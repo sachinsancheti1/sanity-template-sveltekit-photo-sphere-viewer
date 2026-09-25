@@ -25,7 +25,7 @@
 	"devDependencies": {
 		"@eslint/compat": "^2.1.0",
 		"@portabletext/types": "^4.0.2",
-		"@sanity/types": "^5.26.0",
+		"@sanity/types": "^6.16.0",
 		"@sveltejs/adapter-auto": "^7.0.1",
 		"@sveltejs/kit": "^2.10.1",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",

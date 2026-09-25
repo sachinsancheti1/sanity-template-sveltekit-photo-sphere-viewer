@@ -1,5 +1,30 @@
 # Changelog
 
+## v2.1.0 — 2026-09-25
+
+### Performance
+
+- **Photo Sphere Viewer is now lazy-loaded.** The tour page's own JavaScript dropped from 648 kB to 4 kB; the ~630 kB viewer bundle loads in parallel once the page mounts, so the page shell and title paint sooner.
+
+### Added
+
+- **CI** — GitHub Actions runs the app's tests, type-check, and build plus the studio build on every pull request.
+- **Dependabot** — grouped monthly dependency update PRs for the app, the studio, and GitHub Actions.
+- Unit tests for the Sanity → Photo Sphere Viewer data mapping (`npm test` in `app/`).
+
+### Security & upgrades
+
+- Sanity Studio 6.9.1 → **6.16.0**; React 19.3.0 (`react` and `react-dom` aligned — a mismatch breaks the studio build)
+- Fixed a new high-severity `adm-zip` advisory in Sanity's CLI tooling via a scoped override, plus a `colord` advisory via `npm audit fix`. The studio is back to the single known upstream `js-yaml` advisory (dev CLI only).
+
+### Fixed
+
+- `npm run typegen` in the studio failed on the newer Sanity CLI (it now requires `--force` to overwrite `schema.json`). Note that typegen still only emits built-in types because of an upstream Sanity extractor bug; app types remain hand-written.
+
+### Removed
+
+- Leftover Renovate config and CODEOWNERS entry that pointed at Sanity's own team and preset — neither ever worked for copies of this template.
+
 ## v2.0.1 — 2026-08-09
 
 Security and dependency maintenance. No feature or schema changes.

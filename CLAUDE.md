@@ -95,5 +95,13 @@ SANITY_STUDIO_DATASET=...
 
 ## Known Issues / Tech Debt
 
-- **PSV chunk is large** — `@photo-sphere-viewer` bundles at ~630 kB (minified). Could be lazy-loaded with dynamic `import()` if initial page load becomes a concern.
-- **Sanity typegen partial** — `studio/sanity.types.ts` (generated via `npm run typegen` in studio/) only produces Sanity built-in types due to a `styled-components` multiple-instances conflict in the schema extractor (observed on Sanity v5; not yet re-tested since the v6 upgrade). GROQ result types are hand-written in `app/src/lib/types/sanity.ts` instead. Regenerate if schemas change.
+- **PSV is lazy-loaded** — `Virtual.svelte` dynamically imports all PSV modules inside its `$effect` (~630 kB chunk, kept out of the initial page bundle). Keep PSV imports there as `import type` only; a value import at the top of the file would pull the chunk back into the page bundle. Vite still prints a >500 kB chunk warning for it — expected.
+- **Sanity typegen broken upstream** — `npm run typegen` in studio/ produces only Sanity built-in types. Re-tested on Sanity 6.16 / CLI 8.13 (Sept 2026): `sanity schema extract` drops *every* custom type, even a one-field dummy document in a plugin-free config, while the config and schema files load without error — so it's a CLI extractor bug, not the styled-components warning it prints. GROQ result types stay hand-written in `app/src/lib/types/sanity.ts`; update them when schemas change.
+- **One upstream advisory** — `npm audit` in studio/ reports js-yaml 3.x inside `@sanity/cli` → `@vercel/frameworks` (dev CLI only). Never accept npm's `audit fix --force` suggestion: it downgrades `sanity` to 5.x.
+
+## CI & Maintenance
+
+- `.github/workflows/ci.yml` runs on every PR and push to main: app `npm test` + `check` + `build`, studio `build` (placeholder Sanity env vars — builds don't fetch data)
+- `.github/dependabot.yml` opens grouped monthly update PRs for app, studio, and GitHub Actions; let CI go green before merging
+- Studio `package.json` has scoped npm `overrides` for transitive advisories. When changing a *nested* override, delete that package's entries from `package-lock.json` first — npm won't re-resolve an existing lockfile entry. Keep `studio/pnpm-lock.yaml` in sync with `pnpm install --lockfile-only`
+- `react` and `react-dom` must be the exact same version or the studio build and CLI fail

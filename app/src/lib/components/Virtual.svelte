@@ -1,9 +1,6 @@
 <script lang="ts">
-	import { Viewer } from '@photo-sphere-viewer/core';
-	import { VirtualTourPlugin } from '@photo-sphere-viewer/virtual-tour-plugin';
-	import { GalleryPlugin } from '@photo-sphere-viewer/gallery-plugin';
-	import { AutorotatePlugin } from '@photo-sphere-viewer/autorotate-plugin';
-	import { CompassPlugin } from '@photo-sphere-viewer/compass-plugin';
+	import type { Viewer } from '@photo-sphere-viewer/core';
+	import type { VirtualTourPlugin as VirtualTourPluginType } from '@photo-sphere-viewer/virtual-tour-plugin';
 
 	import '@photo-sphere-viewer/core/index.css';
 	import '@photo-sphere-viewer/virtual-tour-plugin/index.css';
@@ -13,7 +10,10 @@
 	import type { VirtualTourItem, VirtualTourPageBlocks } from '$lib/types/sanity';
 	import { toPsvNodes } from '$lib/utils/psv';
 
-	let { virtualTourItem, virtualTourPageBlocks }: {
+	let {
+		virtualTourItem,
+		virtualTourPageBlocks
+	}: {
 		virtualTourItem: VirtualTourItem[];
 		virtualTourPageBlocks: VirtualTourPageBlocks;
 	} = $props();
@@ -23,6 +23,11 @@
 	$effect(() => {
 		if (!wrapper || !virtualTourPageBlocks.start) return;
 
+		// Read reactive values synchronously so the effect tracks them before the async gap
+		const container = wrapper;
+		const startId = virtualTourPageBlocks.start.id;
+		const loadingImg = virtualTourPageBlocks.loader ?? undefined;
+		const nodes = toPsvNodes(virtualTourItem);
 		const {
 			defaultZoomLvl,
 			minFov,
@@ -31,79 +36,104 @@
 			transitionSpeed,
 			autorotateEnabled,
 			autorotateDelay,
-			autorotateSpeed,
+			autorotateSpeed
 		} = virtualTourPageBlocks;
 
-		const viewer = new Viewer({
-			container: wrapper,
-			loadingImg: virtualTourPageBlocks.loader ?? undefined,
-			defaultYaw: '0deg',
-			defaultZoomLvl,
-			navbar: 'autorotate zoom move gallery caption fullscreen',
-			touchmoveTwoFingers: true,
-			moveInertia: true,
-			minFov,
-			maxFov,
+		let viewer: Viewer | undefined;
+		let cancelled = false;
 
-			plugins: [
-				[
-					AutorotatePlugin,
-					{
-						// null autostartDelay disables auto-start when autorotateEnabled is false
-						autostartDelay: autorotateEnabled ? autorotateDelay : null,
-						autostartOnIdle: autorotateEnabled,
-						autorotateSpeed,
-					}
-				],
-				[
-					CompassPlugin,
-					{
-						size: '120px',
-						position: 'bottom right',
-						navigation: true,
-					}
-				],
-				[
-					GalleryPlugin,
-					{
-						thumbnailSize: { width: 100, height: 100 },
-						visibleOnLoad: showGalleryOnLoad,
-						hideOnClick: true,
-						navigationArrows: true,
-					}
-				],
-				[
-					VirtualTourPlugin,
-					{
-						renderMode: '3d',
-						positionMode: 'manual',
-						dataMode: 'client',
-						preload: true,
-						startNodeId: virtualTourPageBlocks.start.id,
-						linksOnCompass: true,
-						transitionOptions: {
-							showLoader: false,
-							speed: transitionSpeed,
-							rotation: true,
-							effect: 'fade',
-						},
-						// Include all four fields — PSV does a shallow merge; missing maxPitch → NaN camera pitch → arrows invisible
-						arrowsPosition: {
-							minPitch: 0.2,
-							maxPitch: Math.PI / 2,
-							linkOverlapAngle: Math.PI / 4,
-							linkPitchOffset: -0.1,
-						},
-					}
-				]
-			]
-		});
+		// PSV is ~650 kB; load it on demand so it stays out of the initial page bundle
+		Promise.all([
+			import('@photo-sphere-viewer/core'),
+			import('@photo-sphere-viewer/virtual-tour-plugin'),
+			import('@photo-sphere-viewer/gallery-plugin'),
+			import('@photo-sphere-viewer/autorotate-plugin'),
+			import('@photo-sphere-viewer/compass-plugin')
+		]).then(
+			([
+				{ Viewer },
+				{ VirtualTourPlugin },
+				{ GalleryPlugin },
+				{ AutorotatePlugin },
+				{ CompassPlugin }
+			]) => {
+				if (cancelled) return;
 
-		const virtualTour = viewer.getPlugin(VirtualTourPlugin) as VirtualTourPlugin;
+				viewer = new Viewer({
+					container,
+					loadingImg,
+					defaultYaw: '0deg',
+					defaultZoomLvl,
+					navbar: 'autorotate zoom move gallery caption fullscreen',
+					touchmoveTwoFingers: true,
+					moveInertia: true,
+					minFov,
+					maxFov,
 
-		virtualTour.setNodes(toPsvNodes(virtualTourItem), virtualTourPageBlocks.start.id);
+					plugins: [
+						[
+							AutorotatePlugin,
+							{
+								// null autostartDelay disables auto-start when autorotateEnabled is false
+								autostartDelay: autorotateEnabled ? autorotateDelay : null,
+								autostartOnIdle: autorotateEnabled,
+								autorotateSpeed
+							}
+						],
+						[
+							CompassPlugin,
+							{
+								size: '120px',
+								position: 'bottom right',
+								navigation: true
+							}
+						],
+						[
+							GalleryPlugin,
+							{
+								thumbnailSize: { width: 100, height: 100 },
+								visibleOnLoad: showGalleryOnLoad,
+								hideOnClick: true,
+								navigationArrows: true
+							}
+						],
+						[
+							VirtualTourPlugin,
+							{
+								renderMode: '3d',
+								positionMode: 'manual',
+								dataMode: 'client',
+								preload: true,
+								startNodeId: startId,
+								linksOnCompass: true,
+								transitionOptions: {
+									showLoader: false,
+									speed: transitionSpeed,
+									rotation: true,
+									effect: 'fade'
+								},
+								// Include all four fields — PSV does a shallow merge; missing maxPitch → NaN camera pitch → arrows invisible
+								arrowsPosition: {
+									minPitch: 0.2,
+									maxPitch: Math.PI / 2,
+									linkOverlapAngle: Math.PI / 4,
+									linkPitchOffset: -0.1
+								}
+							}
+						]
+					]
+				});
 
-		return () => viewer.destroy();
+				const virtualTour = viewer.getPlugin(VirtualTourPlugin) as VirtualTourPluginType;
+
+				virtualTour.setNodes(nodes, startId);
+			}
+		);
+
+		return () => {
+			cancelled = true;
+			viewer?.destroy();
+		};
 	});
 </script>
 

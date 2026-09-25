@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /app
+    schedule:
+      interval: monthly
+    groups:
+      photo-sphere-viewer:
+        patterns: ["@photo-sphere-viewer/*"]
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: npm
+    directory: /studio
+    schedule:
+      interval: monthly
+    groups:
+      sanity:
+        patterns: ["sanity", "@sanity/*", "sanity-plugin-*"]
+      react:
+        patterns: ["react", "react-dom", "@types/react"]
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

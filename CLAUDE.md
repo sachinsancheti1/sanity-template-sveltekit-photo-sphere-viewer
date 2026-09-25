@@ -83,6 +83,12 @@ SANITY_STUDIO_DATASET=...
 - `sanity-plugin-media` for asset management
 - `SCHEMA_GUIDE.md` in `studio/` documents the content model for editors
 
+### Scene links, images, and caching
+
+- **`?node=` scene links** — `+page.server.ts` validates the param (`resolveInitialNodeId`) and passes `initialNodeId`; `+page.svelte` keeps the URL in sync with SvelteKit shallow routing (`pushState`/`replaceState`). The scene for each history entry must live in `page.state.nodeId`: shallow routing deliberately leaves `page.url` at the originally loaded URL, so reading the scene from `page.url` breaks Back. `Virtual.svelte` takes scene requests via its `nodeId` prop in a separate effect so they never rebuild the viewer.
+- **Panorama URLs** go through `panoramaUrl()` (WebP, ≤8192px). Use `fm=webp`, not `auto=format`: PSV fetches without an Accept header, so `auto=format` returns JPEG. Hotspot `textureX/Y` are pixels on the *original* upload, so any resize must scale them too (`panoramaScale`, using `panoramaWidth` from the query).
+- **Caching** — the tour page sets a 60s edge cache in `+page.server.ts`; `/health` is intentionally uncached.
+
 ## Content Model Notes
 
 - `poseHeading` (number, default 180) — initial horizontal camera angle in degrees

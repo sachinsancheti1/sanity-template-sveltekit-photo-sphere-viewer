@@ -1,5 +1,24 @@
 # Changelog
 
+## v2.2.0 — 2026-09-26
+
+### Added
+
+- **Shareable scene links.** The URL tracks the current scene as `?node=<id>`: moving to a scene adds a history entry, Back/Forward return to earlier scenes, and opening a link lands directly on its scene. Unknown or deleted scene IDs fall back to the start scene.
+- **Link previews.** `og:image` is a 1200×630 crop of the scene the link opens on (`twitter:card: summary_large_image`); shared scene links are titled `<scene> · <tour>`. `og:url` is canonical, keeping `?node=` only for valid scenes.
+
+### Performance
+
+- Panoramas are requested as WebP (quality 85) and capped at 8192px wide, never upscaled. On the demo tour that is ~22% smaller per panorama. Gallery thumbnails use `auto=format`.
+- Hotspot `textureX`/`textureY` are rescaled when a panorama wider than 8192px is downscaled, so hotspots stay on the same spot. The query now fetches each image's original width for this.
+- The tour page is edge-cached (`s-maxage=60`, `stale-while-revalidate=600`, plus `CDN-Cache-Control`). Browsers don't cache it and `/health` stays uncached.
+
+### Fixed
+
+- The root layout's padded, width-capped container left a gap above the header, made the tour page scroll, and stopped the viewer short of the edges on wide screens.
+- On mobile, the viewer's bottom controls could sit under the browser's address bar (now sized with `100dvh`).
+- Long tour titles overlapped the Health Check link on phones.
+
 ## v2.1.0 — 2026-09-25
 
 ### Performance

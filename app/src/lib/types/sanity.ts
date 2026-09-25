@@ -49,6 +49,8 @@ export type VirtualTourItem = {
 	caption: string | null
 	description: string | null
 	panorama: string | null
+	/** Original upload width in px; hotspot textureX/Y are measured against it */
+	panoramaWidth: number | null
 	thumbnail: string | null
 	showInGallery: boolean
 	links: VirtualTourLink[] | null

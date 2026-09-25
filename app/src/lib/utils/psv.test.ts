@@ -1,5 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { toPsvNodes } from './psv';
+import {
+	PANORAMA_MAX_WIDTH,
+	panoramaScale,
+	panoramaUrl,
+	previewImageUrl,
+	resolveInitialNodeId,
+	toPsvNodes
+} from './psv';
 import type { VirtualTourItem, VirtualTourLink } from '../types/sanity';
 
 function makeItem(overrides: Partial<VirtualTourItem> = {}): VirtualTourItem {
@@ -9,6 +16,7 @@ function makeItem(overrides: Partial<VirtualTourItem> = {}): VirtualTourItem {
 		caption: 'The lobby',
 		description: 'Main entrance',
 		panorama: 'https://cdn.sanity.io/pano.jpg',
+		panoramaWidth: 2048,
 		thumbnail: 'https://cdn.sanity.io/pano.jpg?w=200',
 		showInGallery: true,
 		links: [],
@@ -35,7 +43,7 @@ describe('toPsvNodes', () => {
 			name: 'Lobby',
 			caption: 'The lobby',
 			description: 'Main entrance',
-			panorama: 'https://cdn.sanity.io/pano.jpg',
+			panorama: 'https://cdn.sanity.io/pano.jpg?w=8192&fit=max&fm=webp&q=85',
 			thumbnail: 'https://cdn.sanity.io/pano.jpg?w=200',
 			showInGallery: true,
 			panoData: { poseHeading: 180, posePitch: 0 },
@@ -107,5 +115,68 @@ describe('toPsvNodes', () => {
 	it('preserves showInGallery: false', () => {
 		const [node] = toPsvNodes([makeItem({ showInGallery: false })]);
 		expect(node.showInGallery).toBe(false);
+	});
+});
+
+describe('resolveInitialNodeId', () => {
+	const items = [{ id: 'start' }, { id: 'lobby' }];
+
+	it('uses the requested node when it exists', () => {
+		expect(resolveInitialNodeId('lobby', items, 'start')).toBe('lobby');
+	});
+
+	it('falls back to the start node for unknown, empty, or missing requests', () => {
+		expect(resolveInitialNodeId('deleted-node', items, 'start')).toBe('start');
+		expect(resolveInitialNodeId('', items, 'start')).toBe('start');
+		expect(resolveInitialNodeId(null, items, 'start')).toBe('start');
+		expect(resolveInitialNodeId(undefined, items, 'start')).toBe('start');
+	});
+});
+
+describe('panorama sizing', () => {
+	it('requests a capped, never-upscaled WebP', () => {
+		const url = new URL(panoramaUrl('https://cdn.sanity.io/images/p/d/abc-16384x8192.jpg'));
+		expect(url.origin + url.pathname).toBe('https://cdn.sanity.io/images/p/d/abc-16384x8192.jpg');
+		expect(Object.fromEntries(url.searchParams)).toEqual({
+			w: String(PANORAMA_MAX_WIDTH),
+			fit: 'max',
+			fm: 'webp',
+			q: '85'
+		});
+	});
+
+	it('only scales hotspots for panoramas wider than the cap', () => {
+		expect(panoramaScale(2048)).toBe(1);
+		expect(panoramaScale(PANORAMA_MAX_WIDTH)).toBe(1);
+		expect(panoramaScale(null)).toBe(1);
+		expect(panoramaScale(16384)).toBe(0.5);
+	});
+
+	it('moves hotspots with a downscaled panorama so they stay on the same spot', () => {
+		const [node] = toPsvNodes([
+			makeItem({
+				panoramaWidth: 16384,
+				links: [makeLink({ position: { textureX: 12000, textureY: 4000 } })]
+			})
+		]);
+		expect(node.links[0].position).toEqual({ textureX: 6000, textureY: 2000 });
+	});
+
+	it('leaves hotspots untouched when the panorama is within the cap', () => {
+		const [node] = toPsvNodes([makeItem({ links: [makeLink()] })]);
+		expect(node.links[0].position).toEqual({ textureX: 100, textureY: 200 });
+	});
+});
+
+describe('previewImageUrl', () => {
+	it('requests a 1200x630 JPEG crop for link previews', () => {
+		const url = new URL(previewImageUrl('https://cdn.sanity.io/images/p/d/abc-2048x1024.jpg'));
+		expect(Object.fromEntries(url.searchParams)).toEqual({
+			w: '1200',
+			h: '630',
+			fit: 'crop',
+			fm: 'jpg',
+			q: '80'
+		});
 	});
 });

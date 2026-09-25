@@ -3,6 +3,7 @@ import {
 	PANORAMA_MAX_WIDTH,
 	panoramaScale,
 	panoramaUrl,
+	previewImageUrl,
 	resolveInitialNodeId,
 	toPsvNodes
 } from './psv';
@@ -164,5 +165,18 @@ describe('panorama sizing', () => {
 	it('leaves hotspots untouched when the panorama is within the cap', () => {
 		const [node] = toPsvNodes([makeItem({ links: [makeLink()] })]);
 		expect(node.links[0].position).toEqual({ textureX: 100, textureY: 200 });
+	});
+});
+
+describe('previewImageUrl', () => {
+	it('requests a 1200x630 JPEG crop for link previews', () => {
+		const url = new URL(previewImageUrl('https://cdn.sanity.io/images/p/d/abc-2048x1024.jpg'));
+		expect(Object.fromEntries(url.searchParams)).toEqual({
+			w: '1200',
+			h: '630',
+			fit: 'crop',
+			fm: 'jpg',
+			q: '80'
+		});
 	});
 });

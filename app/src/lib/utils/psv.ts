@@ -31,6 +31,20 @@ export function panoramaUrl(url: string): string {
 }
 
 /**
+ * 1200×630 JPEG crop from the middle of a panorama, for link previews (og:image). JPEG rather
+ * than WebP because some link-preview crawlers don't render WebP.
+ */
+export function previewImageUrl(url: string): string {
+	const u = new URL(url);
+	u.searchParams.set('w', '1200');
+	u.searchParams.set('h', '630');
+	u.searchParams.set('fit', 'crop');
+	u.searchParams.set('fm', 'jpg');
+	u.searchParams.set('q', '80');
+	return u.toString();
+}
+
+/**
  * Factor to apply to hotspot pixel coordinates (textureX/Y), which are measured on the original
  * upload, when panoramaUrl() serves a downscaled copy.
  */

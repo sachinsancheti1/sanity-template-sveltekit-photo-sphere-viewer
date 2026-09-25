@@ -2,11 +2,31 @@
 	import Virtual from '$lib/components/Virtual.svelte';
 	import { page } from '$app/state';
 	import { pushState, replaceState } from '$app/navigation';
+	import { previewImageUrl } from '$lib/utils/psv';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	const tour = $derived(data.tour);
+
+	// Link previews describe the scene the link opens on: a shared ?node= link names its scene
+	const landingItem = $derived(tour.virtualTourItem.find((item) => item.id === data.initialNodeId));
+	const sharedScene = $derived(
+		page.url.searchParams.get('node') === data.initialNodeId
+			? (landingItem?.caption ?? landingItem?.name)
+			: null
+	);
+	const title = $derived(tour.virtualTourPageBlocks.title ?? 'Virtual Tour');
+	const shareTitle = $derived(sharedScene ? `${sharedScene} · ${title}` : title);
+	// Canonical link: the tour, plus ?node= only for a valid shared scene (drops stale/unknown IDs)
+	const shareUrl = $derived.by(() => {
+		const url = new URL(page.url.pathname, page.url.origin);
+		if (sharedScene && data.initialNodeId) url.searchParams.set('node', data.initialNodeId);
+		return url.href;
+	});
+	const shareImage = $derived(
+		landingItem?.panorama ? previewImageUrl(landingItem.panorama) : undefined
+	);
 
 	// Keep ?node= in sync with the viewer so every scene has a shareable link. The first scene
 	// replaces the history entry; later moves push one, so Back steps through visited scenes.
@@ -22,11 +42,18 @@
 </script>
 
 <svelte:head>
-	<title>{tour.virtualTourPageBlocks.title}</title>
+	<title>{shareTitle}</title>
 	<meta name="description" content={tour.virtualTourPageBlocks.description} />
-	<meta property="og:title" content={tour.virtualTourPageBlocks.title} />
+	<meta property="og:title" content={shareTitle} />
 	<meta property="og:description" content={tour.virtualTourPageBlocks.description} />
 	<meta property="og:type" content="website" />
+	<meta property="og:url" content={shareUrl} />
+	{#if shareImage}
+		<meta property="og:image" content={shareImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta name="twitter:card" content="summary_large_image" />
+	{/if}
 </svelte:head>
 
 <div class="page">

@@ -5,7 +5,14 @@ import { error } from '@sveltejs/kit';
 import { sanityClient } from '$lib/server/sanityClient';
 import { resolveInitialNodeId } from '$lib/utils/psv';
 
-export const load: PageServerLoad = async ({ url }) => {
+// Edge-cache the rendered tour for a minute (serving stale while refreshing), so repeat visits
+// skip the Sanity round-trip; published edits appear within ~60s. Browsers don't cache it.
+const CACHE_HEADERS = {
+	'cache-control': 'public, max-age=0, s-maxage=60, stale-while-revalidate=600',
+	'cdn-cache-control': 'public, max-age=60, stale-while-revalidate=600'
+};
+
+export const load: PageServerLoad = async ({ url, setHeaders }) => {
 	let data: VirtualTourData;
 	try {
 		data = await sanityClient.fetch<VirtualTourData>(`{
@@ -22,5 +29,6 @@ export const load: PageServerLoad = async ({ url }) => {
 		? resolveInitialNodeId(url.searchParams.get('node'), data.virtualTourItem, startId)
 		: null;
 
+	setHeaders(CACHE_HEADERS);
 	return { tour: data, initialNodeId };
 };

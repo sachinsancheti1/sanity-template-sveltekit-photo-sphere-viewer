@@ -58,7 +58,8 @@ export type VirtualTourItem = {
 }
 
 export type VirtualTourData = {
-	virtualTourPageBlocks: VirtualTourPageBlocks
+	/** null when no Virtual Tour Page document exists yet */
+	virtualTourPageBlocks: VirtualTourPageBlocks | null
 	virtualTourItem: VirtualTourItem[]
 }
 

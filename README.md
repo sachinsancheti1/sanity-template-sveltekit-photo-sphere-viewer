@@ -8,6 +8,19 @@ This starter uses [SvelteKit 2](https://kit.svelte.dev/) for the frontend and [S
 
 - [Demo Page](https://enchanting-parfait-a5b9f6.netlify.app/)
 
+## What's New in v2.3 (September 2026)
+
+- **Share this view** — a Share button in the viewer creates a link to exactly what you're looking at (scene, direction, and zoom). It opens the share sheet on phones and copies the link on desktop.
+- **Friendlier edges** — a new project shows setup steps instead of a blank page, and outages or bad links get proper error pages.
+
+## What's New in v2.2 (September 2026)
+
+- **Shareable scene links** — the address bar tracks the current scene (`?node=…`), so any view can be shared and opens right there. The browser's Back button steps through visited scenes. Links to scenes that no longer exist fall back to the start scene.
+- **Rich link previews** — shared links show a preview image of the scene they open on, titled with the scene name.
+- **Lighter panoramas** — served as WebP and capped at 8192px wide; hotspots on larger uploads are rescaled automatically so they stay in place.
+- **Faster repeat visits** — the tour page is edge-cached for 60 seconds (published edits appear within a minute).
+- **Full-window layout** on every screen size, including phones.
+
 ## What's New in v2 (August 2026)
 
 The template received a major overhaul. If you generated a project from this template before v2, see [Upgrading from v1](#upgrading-from-v1) below.
@@ -61,13 +74,11 @@ The following commands are meant to be run in **both** the `/app` and `/studio` 
 
 1. `npm install` to install dependencies
 2. `npx -y sanity@latest init --env`, this will:
-
-- ask you to select or create a Sanity project and dataset, use the same Sanity project and dataset in both folders.
-- output a `.env` file with appropriate variables
-- _(or use `sanity init --env` if you have the CLI installed)_
-
-4. Prefix your environment variables in the SvelteKit `/app` folder with `PUBLIC_`, they should be `PUBLIC_SANITY_DATASET` and `PUBLIC_SANITY_PROJECT_ID`.
-3. `npm run dev` to start the development server
+   - ask you to select or create a Sanity project and dataset, use the same Sanity project and dataset in both folders.
+   - output a `.env` file with appropriate variables
+   - _(or use `sanity init --env` if you have the CLI installed)_
+3. Prefix your environment variables in the SvelteKit `/app` folder with `PUBLIC_`, they should be `PUBLIC_SANITY_DATASET` and `PUBLIC_SANITY_PROJECT_ID`.
+4. `npm run dev` to start the development server
 
 Your SvelteKit app should now be running on [http://localhost:5173/](http://localhost:5173/) and Studio on [http://localhost:3333/](http://localhost:3333/).
 

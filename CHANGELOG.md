@@ -1,5 +1,34 @@
 # Changelog
 
+## v2.3.0 — 2026-09-26
+
+### Added
+
+- **Share this view.** A Share button in the viewer toolbar creates a link to exactly what the visitor is looking at: scene, direction, and zoom (`?node=…&yaw=…&pitch=…&zoom=…`, degrees). Phones and tablets open the system share sheet; desktops copy the link and confirm in the viewer.
+- **Shared views open where they were shared.** The viewer turns to the linked direction and zoom, and idle autorotate doesn't start on its own for these links (the autorotate button still works). Hand-edited values are normalized; the view params drop out of the URL once the visitor moves to another scene.
+- **Tab title follows the scene** (`<scene> · <tour>`), and is restored on Back.
+- **Setup guidance** instead of a blank page when the tour has no Virtual Tour Section document or no Starting Node, pointing editors to the exact Studio location. A missing document previously caused a server error.
+- **Error pages** for "page not found" and "tour couldn't load" (e.g. Sanity unreachable), with a Try again button.
+
+## v2.2.0 — 2026-09-26
+
+### Added
+
+- **Shareable scene links.** The URL tracks the current scene as `?node=<id>`: moving to a scene adds a history entry, Back/Forward return to earlier scenes, and opening a link lands directly on its scene. Unknown or deleted scene IDs fall back to the start scene.
+- **Link previews.** `og:image` is a 1200×630 crop of the scene the link opens on (`twitter:card: summary_large_image`); shared scene links are titled `<scene> · <tour>`. `og:url` is canonical, keeping `?node=` only for valid scenes.
+
+### Performance
+
+- Panoramas are requested as WebP (quality 85) and capped at 8192px wide, never upscaled. On the demo tour that is ~22% smaller per panorama. Gallery thumbnails use `auto=format`.
+- Hotspot `textureX`/`textureY` are rescaled when a panorama wider than 8192px is downscaled, so hotspots stay on the same spot. The query now fetches each image's original width for this.
+- The tour page is edge-cached (`s-maxage=60`, `stale-while-revalidate=600`, plus `CDN-Cache-Control`). Browsers don't cache it and `/health` stays uncached.
+
+### Fixed
+
+- The root layout's padded, width-capped container left a gap above the header, made the tour page scroll, and stopped the viewer short of the edges on wide screens.
+- On mobile, the viewer's bottom controls could sit under the browser's address bar (now sized with `100dvh`).
+- Long tour titles overlapped the Health Check link on phones.
+
 ## v2.1.0 — 2026-09-25
 
 ### Performance

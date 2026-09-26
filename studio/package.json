@@ -1,7 +1,7 @@
 {
   "name": "virtual-tour-studio",
   "private": true,
-  "version": "2.1.0",
+  "version": "2.3.0",
   "main": "package.json",
   "license": "UNLICENSED",
   "scripts": {

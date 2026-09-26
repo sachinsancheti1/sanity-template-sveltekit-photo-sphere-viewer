@@ -19,7 +19,7 @@
 		"@photo-sphere-viewer/core": "^5.15.1",
 		"@photo-sphere-viewer/gallery-plugin": "^5.15.1",
 		"@photo-sphere-viewer/virtual-tour-plugin": "^5.15.1",
-		"@sanity/client": "^7.22.0",
+		"@sanity/client": "^8.6.2",
 		"@tailwindcss/vite": "^4.3.3"
 	},
 	"devDependencies": {
